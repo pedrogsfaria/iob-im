@@ -35,7 +35,7 @@ module iob_im
 `include "iob_im_swreg_gen.vh"
 
     // SWRegs   
-   `IOB_WIRE(IM_ISEL, 8)
+    `IOB_WIRE(IM_ISEL, 8)
     iob_reg #(.DATA_W(8), .RST_VAL(0))
     im_isel (
         .clk        (clk),
@@ -59,7 +59,6 @@ module iob_im
    im_core
      (
       .clk (clk),
-      .rst (rst),
       .isel (IM_ISEL),
       .r_en (im_r_en),
       .r_addr (im_r_addr),
