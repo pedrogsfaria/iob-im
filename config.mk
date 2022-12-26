@@ -3,8 +3,8 @@ SHELL:=/bin/bash
 TOP_MODULE=iob_im
 
 #IM
-IM_DATA_W := 12
-IM_ADDR_W := 6
+IM_DATA_W ?= 12
+IM_ADDR_W ?= 6
 
 
 #PATHS

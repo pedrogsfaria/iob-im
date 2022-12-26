@@ -8,6 +8,6 @@ void im_init(int base_address){
 }
 
 //Set values on outputs
-void gpio_set(uint8_t mblock){
+void im_set(uint8_t mblock){
   IOB_IM_SET_ISEL(mblock);
 }
