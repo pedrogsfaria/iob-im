@@ -1,22 +1,26 @@
    //
-   // GPIO
+   // IM
    //
 
-   iob_gpio gpio0
+   iob_im im
      (
       .clk     (clk),
       .rst     (rst),
 
       // Registers interface
-      .gpio_input (gpio_input),
-      .gpio_output (gpio_output),
-      .gpio_output_enable (gpio_output_enable),
+      .im_r_en (im_r_en),
+      .im_r_addr (im_r_addr),
+      .im_r_data (im_r_data),
+
+      .im_w_en (im_w_en),
+      .im_w_addr (im_w_addr),
+      .im_w_data (im_w_data),      
 
       // CPU interface
-      .valid   (slaves_req[`valid(`GPIO)]),
-      .address (slaves_req[`address(`GPIO,`iob_gpio_swreg_ADDR_W+2)-2]),
-      .wdata   (slaves_req[`wdata(`GPIO)]),
-      .wstrb   (slaves_req[`wstrb(`GPIO)]),
-      .rdata   (slaves_resp[`rdata(`GPIO)]),
-      .ready   (slaves_resp[`ready(`GPIO)])
+      .valid   (slaves_req[`valid(`IM)]),
+      .address (slaves_req[`address(`IM,`iob_im_swreg_ADDR_W+2)-2]),
+      .wdata   (slaves_req[`wdata(`IM)]),
+      .wstrb   (slaves_req[`wstrb(`IM)]),
+      .rdata   (slaves_resp[`rdata(`IM)]),
+      .ready   (slaves_resp[`ready(`IM)])
       );
