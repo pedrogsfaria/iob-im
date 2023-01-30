@@ -19,14 +19,11 @@ module iob_im
    //CPU interface
 `include "iob_s_if.vh"
 
-   //additional inputs and outputs
-   `IOB_INPUT(im_r_en, 1),
-   `IOB_INPUT(im_r_addr, `IM_ADDR_W),
-   `IOB_OUTPUT(im_r_data,`IM_DATA_W),   
+   //additional inputs and outputs  
+   `IOB_INPUT(im_pixel_x, 10),
+   `IOB_INPUT(im_pixel_y, 10),   
    
-   `IOB_INPUT(im_w_en, 1),
-   `IOB_INPUT(im_w_addr, `IM_ADDR_W),
-   `IOB_OUTPUT(im_w_data,`IM_DATA_W),
+   `IOB_OUTPUT(im_rgb, 12),
    
 `include "iob_gen_if.vh"
    );
@@ -52,20 +49,16 @@ module iob_im
      #(
        .IM_DATA_W(`IM_DATA_W),
        .IM_ADDR_W(`IM_ADDR_W),
-       .HEXFILE0("rom0.hex"),
-       .HEXFILE1("rom1.hex"),
-       .HEXFILE2("rom2.hex")       
+       .HEXFILE0("rom0.hex")     
       )
    im_core
      (
+      .rst (rst),
       .clk (clk),
       .isel (IM_ISEL),
-      .r_en (im_r_en),
-      .r_addr (im_r_addr),
-      .r_data (im_r_data),
-      .w_en (im_w_en),
-      .w_addr (im_w_addr),
-      .w_data (im_w_data)      
+      .pixel_x (im_pixel_x),
+      .pixel_y (im_pixel_y),
+      .rgb (im_rgb)  
       );			     
 
 endmodule // iob_im

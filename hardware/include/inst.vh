@@ -8,13 +8,9 @@
       .rst     (rst),
 
       // Registers interface
-      .im_r_en (im_r_en),
-      .im_r_addr (im_r_addr),
-      .im_r_data (im_r_data),
-
-      .im_w_en (im_w_en),
-      .im_w_addr (im_w_addr),
-      .im_w_data (im_w_data),      
+      .im_pixel_x (im_pixel_x),
+      .im_pixel_y (im_pixel_y),
+      .im_rgb (im_rgb),      
 
       // CPU interface
       .valid   (slaves_req[`valid(`IM)]),

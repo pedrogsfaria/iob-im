@@ -4,8 +4,6 @@
  * 
  * brief   Image Memory (IM) module.
  *
- * notes   Each memory block has a size capable of storing an image 
- *         with resolution of 640x480 (3686400 bits ~ 461 kbyte).
 */
 `timescale 1ns/1ps
 `include "iob_im_swreg_def.vh"
@@ -14,101 +12,74 @@ module imemory
   #(
     parameter IM_DATA_W = 32,
     parameter IM_ADDR_W = 32,	
-    parameter HEXFILE0 = "none",
-    parameter HEXFILE1 = "none",
-    parameter HEXFILE2 = "none"
+    parameter HEXFILE0 = "none"
    )
    (
-    input 			clk,
+    input 		   rst,		   
+    input 		   clk, 
+    input [`IM_ISEL_W-1:0] isel, // image block selector
+    input [9:0] 	   pixel_x,
+    input [9:0] 	   pixel_y,
 	
-    input [`IM_ISEL_W-1:0] 	isel, // image block selector
-	
-    // ROM blocks
-    input 			r_en,
-    input [`IM_ADDR_W-1:0] 	r_addr,    
-    output reg [`IM_DATA_W-1:0] r_data, 
-	
-    // RAM block
-    input 			w_en,
-    input [`IM_ADDR_W-1:0] 	w_addr, 
-    input [`IM_DATA_W-1:0] 	w_data	
+    output [11:0] 	   rgb
     );
+	
+   
+   // Internal signals
+   reg 			   r_en;   
+   reg [`IM_ADDR_W-1:0]    r_addr;   
+   reg [`IM_DATA_W-1:0]    rom0_data;
+   reg [15:0] 		    idx;   
+   reg [15:0] 		    idy;
+   reg [11:0] 		    lrgb;
+   
+   
+    	
 
-   reg [`IM_DATA_W-1:0] 	    rom0_data;
-   reg [`IM_DATA_W-1:0] 	    rom1_data;  
-   reg [`IM_DATA_W-1:0] 	    rom2_data;   
-   reg [`IM_DATA_W-1:0] 	    ram_data;
-         
-    
-   // Multiplexer for image output    
-   always @ (*) begin
-      case(isel)
-	'h00 : r_data <= rom0_data;
-	'h01 : r_data <= rom1_data;
-	'h02 : r_data <= rom2_data;
-	'h03 : r_data <= ram_data;
-      endcase; // case (isel)      
-   end // always @ (isel)
+   // Image specs 
+   localparam XLEN = 40; 
+   localparam YLEN = 40;
+   
+   
+   localparam X_LEFT = 20;
+   localparam X_RIGHT = X_LEFT + XLEN - 1;
+   localparam Y_LEFT = 20;
+   localparam Y_RIGHT = Y_LEFT + YLEN - 1;
       
-	 
+   localparam [11:0] FRAME_COLOR = 12'hFFF;
+   
+   
+   assign r_en = ( X_LEFT <= pixel_x && pixel_x <= X_RIGHT && 
+		   Y_LEFT <= pixel_y && pixel_y <= Y_RIGHT ) ? 1:0; // Enable area to display image
+
+   assign idx = pixel_x - X_LEFT;	// Image dedicated coordinate
+   assign idy = pixel_x - X_LEFT;	// Image dedicated coordinate
+   assign r_addr = idx + idy*(YLEN);
+   
+   // Multiplexer for image output    
+   always @ (posedge clk) begin
+      if(rst || ~r_en)
+	lrgb = FRAME_COLOR;
+      else if (r_en)
+	lrgb = rom0_data[11:0];
+   end
+   
+   assign rgb = lrgb;
+   
+        			 
    // Modules instance 
    iob_rom_sp 
      #(
        .DATA_W(`IM_DATA_W),
        .ADDR_W(`IM_ADDR_W),
        .HEXFILE(HEXFILE0)
-      )       
+       )       
    rom0
      (
       .clk(clk),
       .r_en(r_en),
       .addr(r_addr),
       .r_data(rom0_data)
-      );
-
-   iob_rom_sp 
-     #(
-       .DATA_W(`IM_DATA_W),
-       .ADDR_W(`IM_ADDR_W),
-       .HEXFILE(HEXFILE1)
-      )       
-   rom1
-     (
-      .clk(clk),
-      .r_en(r_en),
-      .addr(r_addr),
-      .r_data(rom1_data)
-      );
-
-   iob_rom_sp 
-     #(
-       .DATA_W(`IM_DATA_W),
-       .ADDR_W(`IM_ADDR_W),
-       .HEXFILE(HEXFILE2)
-      ) 
-   rom2
-     (
-      .clk(clk),
-      .r_en(r_en),
-      .addr(r_addr),
-      .r_data(rom2_data)
-      );
-
-   iob_ram_2p
-     #(
-       .DATA_W(`IM_DATA_W),
-       .ADDR_W(`IM_ADDR_W)
-       )
-   ram0
-     (
-      .clk(clk),
-      .w_en(w_en),
-      .w_addr(w_addr),
-      .w_data(w_data),
-
-      .r_en(r_en),
-      .r_addr(r_addr),
-      .r_data(ram_data)
-      );
+      );  
 
 endmodule // imemory
