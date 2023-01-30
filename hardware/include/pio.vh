@@ -1,4 +1,4 @@
    // IM
-   input [9:0] 	   pixel_x,
-   input [9:0] 	   pixel_y,	
-   output [11:0]   rgb,
+   input [9:0] 	   im_pixel_x,
+   input [9:0] 	   im_pixel_y,	
+   output [11:0]   im_rgb,

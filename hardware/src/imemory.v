@@ -36,7 +36,8 @@ module imemory
    
     	
 
-   // Image specs 
+   // Image specs
+   localparam IM_SIZE = 40;   
    localparam XLEN = 40; 
    localparam YLEN = 40;
    
@@ -53,15 +54,16 @@ module imemory
 		   Y_LEFT <= pixel_y && pixel_y <= Y_RIGHT ) ? 1:0; // Enable area to display image
 
    assign idx = pixel_x - X_LEFT;	// Image dedicated coordinate
-   assign idy = pixel_x - X_LEFT;	// Image dedicated coordinate
-   assign r_addr = idx + idy*(YLEN);
+   assign idy = pixel_y - X_LEFT;	// Image dedicated coordinate
+   assign r_addr = idx + idy*(IM_SIZE);
    
    // Multiplexer for image output    
-   always @ (posedge clk) begin
-      if(rst || ~r_en)
-	lrgb = FRAME_COLOR;
-      else if (r_en)
+   always @ (*) begin
+      if(r_en)
 	lrgb = rom0_data[11:0];
+	//lrgb = 12'h000;        
+      else
+        lrgb = FRAME_COLOR;
    end
    
    assign rgb = lrgb;
