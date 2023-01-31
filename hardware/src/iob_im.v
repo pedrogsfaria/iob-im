@@ -47,13 +47,19 @@ module iob_im
    // Image memory instantiation
    imemory
      #(
-       .IM_DATA_W(`IM_DATA_W),
-       .IM_ADDR_W(`IM_ADDR_W),
-       .HEXFILE0("rom0.hex")     
+       .IM0_DATA_W(`IM0_DATA_W),
+       .IM0_ADDR_W(`IM0_ADDR_W),
+       .IM1_DATA_W(`IM1_DATA_W),
+       .IM1_ADDR_W(`IM1_ADDR_W),
+       .IM0_X_LEN(`IM0_X_LEN),
+       .IM0_Y_LEN(`IM0_Y_LEN),
+       .IM1_X_LEN(`IM1_X_LEN),
+       .IM1_Y_LEN(`IM1_Y_LEN),
+       .HEXFILE0("rom0.hex"),
+       .HEXFILE1("rom1.hex")
       )
    im_core
      (
-      .rst (rst),
       .clk (clk),
       .isel (IM_ISEL),
       .pixel_x (im_pixel_x),

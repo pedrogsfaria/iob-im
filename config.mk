@@ -3,8 +3,14 @@ SHELL:=/bin/bash
 TOP_MODULE=iob_im
 
 #IM
-IM_DATA_W ?= 12
-IM_ADDR_W ?= 6
+IM0_DATA_W ?= 12
+IM0_ADDR_W ?= 11
+IM1_DATA_W ?= 12
+IM1_ADDR_W ?= 11
+IM0_X_LEN ?= 40
+IM0_Y_LEN ?= 40
+IM1_X_LEN ?= 40
+IM1_Y_LEN ?= 40
 
 
 #PATHS
@@ -14,8 +20,14 @@ FPGA_DIR ?=$(IM_DIR)/hardware/fpga/$(FPGA_COMP)
 DOC_DIR ?=
 
 #define macros
-DEFINE+=$(defmacro)IM_DATA_W=$(IM_DATA_W)
-DEFINE+=$(defmacro)IM_ADDR_W=$(IM_ADDR_W)
+DEFINE+=$(defmacro)IM0_DATA_W=$(IM0_DATA_W)
+DEFINE+=$(defmacro)IM0_ADDR_W=$(IM0_ADDR_W)
+DEFINE+=$(defmacro)IM1_DATA_W=$(IM1_DATA_W)
+DEFINE+=$(defmacro)IM1_ADDR_W=$(IM1_ADDR_W)
+DEFINE+=$(defmacro)IM0_X_LEN=$(IM0_X_LEN)
+DEFINE+=$(defmacro)IM0_Y_LEN=$(IM0_Y_LEN)
+DEFINE+=$(defmacro)IM1_X_LEN=$(IM1_X_LEN)
+DEFINE+=$(defmacro)IM1_Y_LEN=$(IM1_Y_LEN)
 
 LIB_DIR ?=$(IM_DIR)/submodules/LIB
 MEM_DIR ?=$(IM_DIR)/submodules/MEM
